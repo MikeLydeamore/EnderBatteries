@@ -13,8 +13,7 @@ public class EnderRFStoragePlugin implements EnderStoragePlugin {
 	@Override
 	public AbstractEnderStorage createEnderStorage(EnderStorageManager manager,
 			String owner, int freq) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EnderRFStorage(manager, owner, freq);
 	}
 
 	@Override
@@ -24,14 +23,12 @@ public class EnderRFStoragePlugin implements EnderStoragePlugin {
 
 	@Override
 	public void loadConfig(ConfigTag arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void sendClientInfo(EntityPlayer arg0,
 			List<AbstractEnderStorage> arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
