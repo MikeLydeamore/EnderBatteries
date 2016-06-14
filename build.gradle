@@ -1,0 +1,143 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+//repositories {
+//	maven {
+//		name = "CurseForge"
+//		url = "https://minecraft.curseforge.com/api" + project.curseforge_key
+//	}
+//}
+
+apply plugin: 'forge'
+apply plugin: 'maven-publish'
+
+version = "MC${minecraft_version}-${mod_version}-${System.getenv().BUILD_NUMBER}"
+group= "exastris"
+archivesBaseName = "Ex-Astris"
+
+minecraft {
+    version = "1.7.10-10.13.4.1614-1.7.10"
+    assetDir = "eclipse/assets"
+	 
+	 replace "@VERSION@", project.version
+	 replaceIn "Data/ModData.java"
+	
+}
+
+sourceCompatibility = 7
+targetCompatibility = 7
+
+repositories {
+    maven { url 'http://maven.tterrag.com/' }
+	ivy {
+		name "CoFHLib"
+		artifactPattern "http://addons-origin.cursecdn.com/files/2233/88/[module]-[revision].[ext]"
+	}
+	ivy {
+		name "CoFHCore"
+        artifactPattern "http://addons-origin.cursecdn.com/files/2233/150/[module]-[revision].[ext]"
+    }
+	ivy {
+		name "ThermalExpansion"
+        artifactPattern "http://addons-origin.cursecdn.com/files/2233/141/[module]-[revision].[ext]"
+    }
+	ivy {
+		name "ThermalFoundation"
+        artifactPattern "http://addons-origin.cursecdn.com/files/2233/148/[module]-[revision].[ext]"
+    }
+	maven { url "http://tehnut.info/maven/" }
+	maven { url = "http://mobiusstrip.eu/maven/" } // Waila
+	maven { url = "http://chickenbones.net/maven/" } // CCC & NEI
+   maven { url = "http://dvs1.progwml6.com/files/maven/" } // TCon and Mantle
+	maven {
+        name = "Team Metallurgy Maven"
+        url = "http://shadow.gcod.net/maven"
+    }
+	maven { url = "http://maven.tterrag.com/" }
+	 maven {
+        name = "Player"
+        url = "http://maven.ic2.player.to/"
+    }
+	 maven {
+		url = "http://dl.tsr.me/artifactory/libs-release-local"
+	}
+	 maven {
+		url = "http://coloredlightscore.us.to/maven/chisel-2-dev/"
+	}
+}
+
+dependencies {
+  
+	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
+	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
+	compile "codechicken:EnderStorage:1.7.10-1.4.7.38:dev"
+
+    compile fileTree(dir: 'libs', include: ['*.jar', '*.zip'])
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+publishing {
+    tasks.publish.dependsOn 'build'
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+
+            artifact sourceJar
+            artifact deobfJar
+        }
+    }
+
+    repositories {
+        if (project.hasProperty('mavendir')) {
+            maven { url mavendir }
+        }
+    }
+}
