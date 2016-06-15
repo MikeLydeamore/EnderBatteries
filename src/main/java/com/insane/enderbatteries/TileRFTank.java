@@ -38,6 +38,8 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 	}
 	
 	private int pushEnergy(int maxReceive, boolean simulate) {
+		// This looks over each IEnergyReceiver and pushes out as much energy as possible.
+		// Returns the total spread across *all* attached IEnergyReceivers.
 		int total = 0;
 		for (int i = 0; i < 6; i++) {
 			if (receivers[i] == null)
@@ -76,6 +78,7 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 
 	@Override
 	public int receiveEnergy(ForgeDirection dir, int maxReceive, boolean simulate) {
+		// This looks over all the connected batteries and asks them how much to distribute.
 		int total = 0;
 		for (BlockPos pos : storage.getAttachedTiles()) {
 			TileEntity te = worldObj.getTileEntity(pos.getX(), pos.getY(), pos.getZ());

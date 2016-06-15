@@ -1,6 +1,9 @@
 package com.insane.enderbatteries;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import codechicken.enderstorage.api.EnderStorageManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -35,6 +38,9 @@ public class EnderBatteries {
 	public void init(FMLInitializationEvent event)
 	{
 		EnderStorageManager.registerPlugin(new EnderRFStoragePlugin());
+		
+		//Recipe
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockEnderRFStorage), new Object[] {"xyx","yzy","xyx", 'x', "blockRedstone", 'y', Items.ender_pearl, 'z', "blockDiamond"}));
 	}
 	
 }
