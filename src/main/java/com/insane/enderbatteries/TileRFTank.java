@@ -1,5 +1,6 @@
 package com.insane.enderbatteries;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.enderstorage.api.AbstractEnderStorage;
@@ -8,7 +9,8 @@ import codechicken.enderstorage.common.TileFrequencyOwner;
 import cofh.api.energy.IEnergyReceiver;
 
 public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
-
+	
+	private boolean firstTick = false;
 	private EnderRFStorage storage;
 	private IEnergyReceiver[] receivers = new IEnergyReceiver[6];
 
@@ -25,7 +27,7 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 	public void retestForEnergyHandlers() {
 		for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 			TileEntity te = worldObj.getTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
-			if (te != null && te instanceof IEnergyReceiver) {
+			if (te != null && te instanceof IEnergyReceiver && !(te instanceof TileRFTank)) {
 				receivers[dir.ordinal()] = (IEnergyReceiver) te;
 				System.out.println("Added energy receiver");
 			}
@@ -34,6 +36,7 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 				System.out.println("Removed energy receiver");
 			}
 		}
+		this.markDirty();
 	}
 	
 	private int pushEnergy(int maxReceive, boolean simulate) {
@@ -42,7 +45,7 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 			if (receivers[i] == null)
 				continue;
 			
-			int specific = receivers[i].receiveEnergy(ForgeDirection.VALID_DIRECTIONS[i], maxReceive, simulate);
+			int specific = receivers[i].receiveEnergy(ForgeDirection.VALID_DIRECTIONS[i].getOpposite(), maxReceive, simulate);
 			maxReceive -= specific;
 			total += specific;
 		}
@@ -80,13 +83,20 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 			TileEntity te = worldObj.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
 			if (!(te instanceof TileRFTank))
 				continue;
-			
 			TileRFTank battery = (TileRFTank) te;
 			int thisBattery = battery.pushEnergy(maxReceive, simulate);
 			total += thisBattery;
 			maxReceive -= thisBattery;
 		}
 		return total;
+	}
+	
+	@Override
+	public void updateEntity() {
+		if (!firstTick) {
+			retestForEnergyHandlers();
+			firstTick = true;
+		}
 	}
 
 	

@@ -40,8 +40,9 @@ public class BlockEnderRFStorage extends BlockContainer {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		TileRFTank te = (TileRFTank) world.getTileEntity(x, y, z);
-		if (te != null)
+		if (te != null) {
 			te.retestForEnergyHandlers();
+		}
 	}
 	
 	@Override
@@ -49,6 +50,7 @@ public class BlockEnderRFStorage extends BlockContainer {
 		TileRFTank te = (TileRFTank) world.getTileEntity(x, y, z);
 		if (te != null)	{
 			te.addCoords();
+			te.retestForEnergyHandlers();
 		}
 	}
 	
