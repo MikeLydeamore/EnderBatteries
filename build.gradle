@@ -85,6 +85,7 @@ dependencies {
 	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
 	compile "codechicken:EnderStorage:1.7.10-1.4.7.38:dev"
+	compile "org.projectlombok:lombok:1.16.8"
 
     compile fileTree(dir: 'libs', include: ['*.jar', '*.zip'])
 }

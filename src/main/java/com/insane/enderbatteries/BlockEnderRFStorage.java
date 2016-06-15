@@ -2,6 +2,7 @@ package com.insane.enderbatteries;
 
 import codechicken.enderstorage.common.TileFrequencyOwner;
 import codechicken.lib.raytracer.RayTracer;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,6 +35,30 @@ public class BlockEnderRFStorage extends BlockContainer {
 		MovingObjectPosition hit = RayTracer.retraceBlock(world, player, x, y, z);
 
 		return tile.activate(player, hit.subHit);
+	}
+	
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		TileRFTank te = (TileRFTank) world.getTileEntity(x, y, z);
+		if (te != null)
+			te.retestForEnergyHandlers();
+	}
+	
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		TileRFTank te = (TileRFTank) world.getTileEntity(x, y, z);
+		if (te != null)	{
+			te.addCoords();
+		}
+	}
+	
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		TileRFTank te = (TileRFTank) world.getTileEntity(x, y, z);
+		if (te != null) {
+			te.removeCoords();
+		}
+		super.breakBlock(world, x, y, z, block, meta);
 	}
 
 }
