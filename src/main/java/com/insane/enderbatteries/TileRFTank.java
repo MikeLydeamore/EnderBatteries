@@ -29,11 +29,9 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 			TileEntity te = worldObj.getTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
 			if (te != null && te instanceof IEnergyReceiver && !(te instanceof TileRFTank)) {
 				receivers[dir.ordinal()] = (IEnergyReceiver) te;
-				System.out.println("Added energy receiver");
 			}
 			else if (receivers[dir.ordinal()] != null) {
 				receivers[dir.ordinal()] = null;
-				System.out.println("Removed energy receiver");
 			}
 		}
 		this.markDirty();
