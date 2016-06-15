@@ -26,15 +26,15 @@ apply plugin: 'forge'
 apply plugin: 'maven-publish'
 
 version = "MC${minecraft_version}-${mod_version}-${System.getenv().BUILD_NUMBER}"
-group= "exastris"
-archivesBaseName = "Ex-Astris"
+group= "enderbatteries"
+archivesBaseName = "enderbatteries"
 
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
     assetDir = "eclipse/assets"
 	 
-	 replace "@VERSION@", project.version
-	 replaceIn "Data/ModData.java"
+	// replace "@VERSION@", project.version
+	 //replaceIn "Data/ModData.java"
 	
 }
 

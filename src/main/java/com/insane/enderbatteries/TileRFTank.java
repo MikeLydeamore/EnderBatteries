@@ -2,6 +2,8 @@ package com.insane.enderbatteries;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.enderstorage.api.AbstractEnderStorage;
 import codechicken.enderstorage.api.EnderStorageManager;
@@ -54,11 +56,11 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 	}
 	
 	public void addCoords() {
-		storage.addCoords(xCoord, yCoord, zCoord);
+		storage.addCoords(xCoord, yCoord, zCoord, this.worldObj.provider.dimensionId);
 	}
 	
 	public void removeCoords() {
-		storage.removeCoords(xCoord, yCoord, zCoord);
+		storage.removeCoords(xCoord, yCoord, zCoord, this.worldObj.provider.dimensionId);
 	}
 
 	@Override
@@ -80,8 +82,9 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 	public int receiveEnergy(ForgeDirection dir, int maxReceive, boolean simulate) {
 		// This looks over all the connected batteries and asks them how much to distribute.
 		int total = 0;
-		for (BlockPos pos : storage.getAttachedTiles()) {
-			TileEntity te = worldObj.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
+		for (BlockPosDimension pos : storage.getAttachedTiles()) {
+			World world = DimensionManager.getProvider(pos.getDimension()).worldObj;
+			TileEntity te = world.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
 			if (!(te instanceof TileRFTank))
 				continue;
 			TileRFTank battery = (TileRFTank) te;

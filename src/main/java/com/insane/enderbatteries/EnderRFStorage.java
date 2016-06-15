@@ -13,7 +13,7 @@ import codechicken.enderstorage.api.EnderStorageManager;
 public class EnderRFStorage extends AbstractEnderStorage {
 
 	@Getter
-	private HashSet<BlockPos> attachedTiles = new HashSet<BlockPos>();
+	private HashSet<BlockPosDimension> attachedTiles = new HashSet<BlockPosDimension>();
 	
 	public EnderRFStorage(EnderStorageManager manager, String owner, int freq) {
 		super(manager, owner, freq);
@@ -24,7 +24,7 @@ public class EnderRFStorage extends AbstractEnderStorage {
 		int total = tag.getInteger("totalTiles");
 		for (int i = 0 ; i < total; i++) {
 			NBTTagCompound posTag = (NBTTagCompound) tag.getTag(String.valueOf(i));
-			BlockPos pos = new BlockPos(posTag);
+			BlockPosDimension pos = new BlockPosDimension(posTag);
 			attachedTiles.add(pos);
 		}
 	}
@@ -34,7 +34,7 @@ public class EnderRFStorage extends AbstractEnderStorage {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setInteger("totalTiles", attachedTiles.size());
 		int i = 0;
-		for (BlockPos pos : attachedTiles) {
+		for (BlockPosDimension pos : attachedTiles) {
 			NBTTagCompound posTag = pos.saveToTag();
 			tag.setTag(String.valueOf(i), posTag);
 			i++;
@@ -47,13 +47,13 @@ public class EnderRFStorage extends AbstractEnderStorage {
 		return "RF";
 	}
 	
-	public void addCoords(int x, int y, int z) {
-		attachedTiles.add(new BlockPos(x ,y ,z));
+	public void addCoords(int x, int y, int z, int dimension) {
+		attachedTiles.add(new BlockPosDimension(x ,y ,z, dimension));
 		this.setDirty();
 	}
 	
-	public void removeCoords(int x, int y, int z) {
-		attachedTiles.remove(new BlockPos(x, y, z));
+	public void removeCoords(int x, int y, int z, int dimension) {
+		attachedTiles.remove(new BlockPosDimension(x, y, z, dimension));
 		this.setDirty();
 	}
 
