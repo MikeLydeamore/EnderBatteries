@@ -2,17 +2,23 @@ package com.insane.enderbatteries;
 
 import codechicken.enderstorage.common.TileFrequencyOwner;
 import codechicken.lib.raytracer.RayTracer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class BlockEnderRFStorage extends BlockContainer {
 
+	private IIcon[] icons = new IIcon[3];
+	
 	protected BlockEnderRFStorage() {
 		super(Material.rock);
 		setHardness(15F);
@@ -61,6 +67,20 @@ public class BlockEnderRFStorage extends BlockContainer {
 			te.removeCoords();
 		}
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister register) {
+		icons[0] = register.registerIcon("enderbatteries:batteryBottom");
+		icons[1] = register.registerIcon("enderbatteries:batteryTop");
+		icons[2] = register.registerIcon("enderbatteries:batterySide");
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return icons[side < 2 ? side : 2];
 	}
 
 }

@@ -29,7 +29,7 @@ public class EnderBatteries {
 		blockEnderRFStorage.setBlockName("enderBattery");
 		GameRegistry.registerBlock(blockEnderRFStorage, "enderBattery");
 		//Don't know why this is here but EnderChests does it...
-		MinecraftForge.EVENT_BUS.register(blockEnderRFStorage); 
+		//MinecraftForge.EVENT_BUS.register(blockEnderRFStorage); 
 		
 		GameRegistry.registerTileEntity(TileRFTank.class, "Ender Battery");
 	}
