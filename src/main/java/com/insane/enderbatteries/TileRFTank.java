@@ -1,10 +1,12 @@
 package com.insane.enderbatteries;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
+import codechicken.enderstorage.EnderStorage;
 import codechicken.enderstorage.api.AbstractEnderStorage;
 import codechicken.enderstorage.api.EnderStorageManager;
 import codechicken.enderstorage.common.TileFrequencyOwner;
@@ -15,7 +17,7 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 	private boolean firstTick = false;
 	private EnderRFStorage storage;
 	private IEnergyReceiver[] receivers = new IEnergyReceiver[6];
-
+	
 	@Override
 	public AbstractEnderStorage getStorage() {
 		return storage;
@@ -24,6 +26,7 @@ public class TileRFTank extends TileFrequencyOwner implements IEnergyReceiver {
 	@Override
 	public void reloadStorage() {
 		storage = (EnderRFStorage) EnderStorageManager.instance(worldObj.isRemote).getStorage(owner, freq, "RF");
+		
 	}
 	
 	public void retestForEnergyHandlers() {
