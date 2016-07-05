@@ -12,7 +12,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid=EnderBatteries.MODID)
+@Mod(modid=EnderBatteries.MODID, dependencies="required-after:EnderStorage")
 public class EnderBatteries {
 
 	public static final String MODID = "enderbatteries";
